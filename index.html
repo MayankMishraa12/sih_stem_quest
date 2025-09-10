@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>STEM Quest — Professional Redesign</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ===== Whimsical Background ===== */
+      @keyframes floatBackground {
+        0% {
+          background-position: 5vw 15vh, 90vw 20vh, 85vw 80vh, 10vw 75vh,
+            50vw 50vh, 30vw 90vh;
+        }
+        50% {
+          background-position: 10vw 20vh, 85vw 15vh, 80vw 85vh, 15vw 70vh,
+            55vw 55vh, 25vw 85vh;
+        }
+        100% {
+          background-position: 5vw 15vh, 90vw 20vh, 85vw 80vh, 10vw 75vh,
+            50vw 50vh, 30vw 90vh;
+        }
+      }
+
+      .app::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-color: var(--surface-ground);
+        transition: background-color 0.3s, opacity 0.5s;
+        background-repeat: no-repeat;
+        animation: floatBackground 25s ease-in-out infinite;
+        /* Light Mode SVGs */
+        background-image: /* DNA */ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 80 120'%3E%3Cpath d='M20,10 C60,10 20,50 60,50 M60,10 C20,10 60,50 20,50 M20,70 C60,70 20,110 60,110 M60,70 C20,70 60,110 20,110' stroke='%23dbeafe' stroke-width='4' fill='none'/%3E%3C/svg%3E"),
+          /* Microscope */
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M35 25L65 25V35L80 35V45L65 45V65C65 75 50 85 40 75L40 85H70' stroke='%23dbeafe' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+          /* Atom */
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='8' fill='%23dbeafe'/%3E%3Cellipse cx='50' cy='50' rx='40' ry='15' stroke='%23dbeafe' stroke-width='4' fill='none'/%3E%3Cellipse cx='50' cy='50' rx='15' ry='40' stroke='%23dbeafe' stroke-width='4' fill='none' transform='rotate(60 50 50)'/%3E%3C/svg%3E"),
+          /* Beaker */
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 100 100'%3E%3Cpath d='M20 15H80V85H20Z M30 65 H70' stroke='%23dbeafe' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"),
+          /* Lens */
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 100 100'%3E%3Ccircle cx='45' cy='45' r='30' stroke='%23dbeafe' stroke-width='5' fill='none'/%3E%3Cpath d='M68 68 L85 85' stroke='%23dbeafe' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"),
+          /* Scale */
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='100' viewBox='0 0 120 100'%3E%3Cpath d='M10 30H110 M60 30V85 M40 85H80 M20 30L40 55H0Z M100 30L80 55H120Z' stroke='%23dbeafe' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-size: 120px, 150px, 150px, 135px, 135px, 180px;
+        opacity: 1;
+      }
+
+      body.dark .app::before {
+        /* Dark Mode SVGs (change stroke color) */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 80 120'%3E%3Cpath d='M20,10 C60,10 20,50 60,50 M60,10 C20,10 60,50 20,50 M20,70 C60,70 20,110 60,110 M60,70 C20,70 60,110 20,110' stroke='%23475569' stroke-width='4' fill='none'/%3E%3C/svg%3E"),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M35 25L65 25V35L80 35V45L65 45V65C65 75 50 85 40 75L40 85H70' stroke='%23475569' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='8' fill='%23475569'/%3E%3Cellipse cx='50' cy='50' rx='40' ry='15' stroke='%23475569' stroke-width='4' fill='none'/%3E%3Cellipse cx='50' cy='50' rx='15' ry='40' stroke='%23475569' stroke-width='4' fill='none' transform='rotate(60 50 50)'/%3E%3C/svg%3E"),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 100 100'%3E%3Cpath d='M20 15H80V85H20Z M30 65 H70' stroke='%23475569' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 100 100'%3E%3Ccircle cx='45' cy='45' r='30' stroke='%23475569' stroke-width='5' fill='none'/%3E%3Cpath d='M68 68 L85 85' stroke='%23475569' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='100' viewBox='0 0 120 100'%3E%3Cpath d='M10 30H110 M60 30V85 M40 85H80 M20 30L40 55H0Z M100 30L80 55H120Z' stroke='%23475569' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        opacity: 0.6;
+      }
+
+      /* ===== Professional Theme & Layout ===== */
+      :root {
+        --primary: #3b82f6; /* Blue 500 */
+        --accent: #84cc16; /* Lime 500 */
+        --text-heading: #1e293b; /* Slate 800 */
+        --text-body: #334155; /* Slate 700 */
+        --text-muted: #64748b; /* Slate 500 */
+        --surface-ground: #eff6ff; /* Blue 50 */
+        --surface-card: #ffffff;
+        --surface-overlay: #dbeafe; /* Blue 100 */
+        --border-color: #dbeafe; /* Blue 100 */
+        --radius: 0.75rem; /* 12px */
+        --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+      }
+
+      body.dark {
+        --primary: #6366f1; /* Indigo 500 */
+        --accent: #34d399; /* Emerald 400 */
+        --text-heading: #f1f5f9; /* Slate 100 */
+        --text-body: #cbd5e1; /* Slate 300 */
+        --text-muted: #94a3b8; /* Slate 400 */
+        --surface-ground: #0f172a; /* Slate 900 */
+        --surface-card: #1e293b; /* Slate 800 */
+        --border-color: #334155; /* Slate 700 */
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        margin: 0;
+        color: var(--text-body);
+        background-color: var(
+          --surface-ground
+        ); /* Fallback for browsers without pseudo-element support */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition: color 0.3s;
+      }
+
+      .app {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 1;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 1rem 1.5rem;
+        background-color: var(--surface-overlay);
+        color: var(--text-heading);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow);
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      body.dark header {
+        background-color: var(--surface-card);
+      }
+      .logo {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius);
+        background: var(--primary);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: "Fredoka One", cursive;
+        font-size: 1.1rem;
+        line-height: 1;
+        flex-shrink: 0;
+        transform: rotate(-3deg);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+      .title h1 {
+        font-size: 20px;
+        margin: 0;
+        color: var(--text-heading);
+      }
+      .title p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: var(--text-muted);
+        opacity: 1;
+      }
+      .status {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .chip {
+        background: var(--surface-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      body.dark .chip {
+        background: var(--surface-ground);
+      }
+
+      .main {
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        flex-grow: 1;
+      }
+
+      .controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .left {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      button.btn {
+        background: var(--primary);
+        color: #fff;
+        border: 0;
+        padding: 10px 16px;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 700;
+        font-family: inherit;
+        font-size: 0.875rem;
+        transition: background-color 0.2s ease-in-out,
+          box-shadow 0.2s ease-in-out;
+        box-shadow: var(--shadow);
+      }
+      button.btn:hover {
+        background-color: #2563eb;
+        box-shadow: var(--shadow-md);
+      }
+      body.dark button.btn:hover {
+        background-color: #a5b4fc;
+      }
+
+      button.ghost {
+        background: var(--surface-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-body);
+        padding: 9px 14px;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: inherit;
+        font-size: 0.875rem;
+        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+      }
+      button.ghost:hover {
+        background-color: #fff;
+        border-color: var(--primary);
+      }
+      body.dark button.ghost {
+        background: transparent;
+      }
+      body.dark button.ghost:hover {
+        background-color: var(--surface-overlay);
+      }
+      #darkToggle {
+        font-size: 1.25rem;
+        padding: 6px;
+      }
+
+      .lang-select {
+        padding: 9px;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+        background-color: var(--surface-card);
+        color: var(--text-body);
+        font-family: inherit;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 1.5rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--surface-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 1rem;
+        box-shadow: var(--shadow);
+        transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+      }
+      .card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+      .card .title {
+        font-weight: 800;
+        color: var(--text-heading);
+        margin-bottom: 6px;
+      }
+      .card small {
+        color: var(--text-muted);
+      }
+
+      .progress {
+        height: 8px;
+        background: var(--surface-overlay);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 1rem;
+      }
+      .progress > i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, #38bdf8, var(--accent));
+        width: 0%;
+        transition: width 900ms cubic-bezier(0.2, 0.9, 0.3, 1);
+      }
+
+      /* Aside/Sidebar */
+      aside {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .avatar-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius);
+        background: linear-gradient(45deg, #a5b4fc, var(--primary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: transform 0.2s ease;
+      }
+      .avatar:hover {
+        transform: scale(1.1);
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: var(--radius);
+      }
+
+      .leaderboard .lb-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 6px;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .leaderboard .lb-item:last-child {
+        border-bottom: none;
+      }
+      .rank {
+        width: 40px;
+        font-weight: 800;
+        font-size: 18px;
+        text-align: center;
+        color: var(--text-heading);
+      }
+
+      .footer {
+        padding: 1.5rem;
+        background: var(--surface-card);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+      }
+
+      /* Modals & Overlays */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 40;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+      .modal {
+        background: var(--surface-card);
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        max-width: 920px;
+        width: 96%;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+      }
+      .modal h3 {
+        margin: 0 0 1rem 0;
+        color: var(--text-heading);
+      }
+
+      /* Avatar Picker */
+      .avatar-picker {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 8px;
+      }
+      .avatar-choice {
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid var(--border-color);
+        cursor: pointer;
+        min-width: 72px;
+        text-align: center;
+        transition: border-color 0.2s;
+      }
+      .avatar-choice:hover {
+        border-color: var(--primary);
+      }
+
+      /* Medals */
+      .medal {
+        font-size: 20px;
+        margin-right: 8px;
+      }
+
+      /* Heatmap */
+      .heatmap {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+      }
+      .heat-cell {
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+        font-size: 0.75rem;
+        line-height: 1.2;
+      }
+
+      /* Badges */
+      .badges {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        color: #059669;
+        font-size: 0.75rem;
+      }
+      body.dark .badge {
+        background: #064e3b;
+        border-color: #10b981;
+        color: #a7f3d0;
+      }
+
+      /* Small responsive adjustments */
+      @media (max-width: 980px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          order: -1;
+          margin-bottom: 1.5rem;
+        }
+      }
+      @media (max-width: 640px) {
+        .main {
+          padding: 1rem;
+        }
+        header {
+          padding: 0.75rem 1rem;
+          gap: 0.75rem;
+        }
+        .logo {
+          width: 48px;
+          height: 48px;
+        }
+        .title h1 {
+          font-size: 18px;
+        }
+        .status {
+          display: none;
+        } /* Hide status on very small screens for space */
+        .content {
+          grid-template-columns: 1fr;
+        }
+        .controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .controls .left,
+        .controls .right {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
+        .controls .right {
+          margin-top: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header>
+        <div class="logo">STEM<br />Q</div>
+        <div class="title">
+          <h1 id="appTitle">STEM Quest</h1>
+          <p id="appSub">Gamified Learning Platform</p>
+        </div>
+        <div class="status">
+          <div id="networkChip" class="chip">ONLINE</div>
+          <div class="chip" id="loggedAs">Mayank (student)</div>
+          <button class="ghost" id="darkToggle">🌙</button>
+        </div>
+      </header>
+
+      <div class="main">
+        <div class="controls">
+          <div class="left">
+            <button class="btn" id="loginBtn">Login</button>
+            <select id="langSelect" class="lang-select">
+              <option value="en">English</option>
+              <option value="hi">Hindi</option>
+            </select>
+            <button class="ghost" id="speakBtn">🔊 Speak</button>
+          </div>
+          <div
+            class="right"
+            style="
+              margin-left: auto;
+              display: flex;
+              gap: 8px;
+              align-items: center;
+            "
+          >
+            <div class="chip" id="xpChip">2847 XP • L3</div>
+            <button class="ghost" id="avatarPickerBtn">Choose Avatar</button>
+          </div>
+        </div>
+
+        <div class="content">
+          <section>
+            <div
+              class="topline"
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+              "
+            >
+              <div class="stat card" style="padding: 1rem; text-align: center">
+                <div
+                  class="label"
+                  style="font-size: 0.875rem; color: var(--text-muted)"
+                >
+                  Engagement Rate
+                </div>
+                <div
+                  class="value"
+                  id="statEng"
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: var(--text-heading);
+                  "
+                >
+                  80%
+                </div>
+              </div>
+              <div class="stat card" style="padding: 1rem; text-align: center">
+                <div
+                  class="label"
+                  style="font-size: 0.875rem; color: var(--text-muted)"
+                >
+                  Total XP (class)
+                </div>
+                <div
+                  class="value"
+                  id="statXP"
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: var(--text-heading);
+                  "
+                >
+                  10100
+                </div>
+              </div>
+              <div class="stat card" style="padding: 1rem; text-align: center">
+                <div
+                  class="label"
+                  style="font-size: 0.875rem; color: var(--text-muted)"
+                >
+                  Lessons Completed
+                </div>
+                <div
+                  class="value"
+                  id="statLessons"
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: var(--text-heading);
+                  "
+                >
+                  42
+                </div>
+              </div>
+            </div>
+
+            <div class="grid" id="gameGrid"></div>
+
+            <div style="margin-top: 1.5rem" class="card">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                <strong style="color: var(--text-heading); font-size: 1.125rem"
+                  >Class Leaderboard</strong
+                >
+                <small id="lbSummary">Top students this week</small>
+              </div>
+              <div class="leaderboard" id="leaderboard"></div>
+            </div>
+          </section>
+
+          <aside>
+            <div class="card">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 1rem;
+                "
+              >
+                <strong style="color: var(--text-heading)">Students</strong>
+                <button class="ghost" id="addStudentBtn">+ Add</button>
+              </div>
+              <div class="avatar-row" id="avatars"></div>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--text-heading)"
+                >Selected Profile</strong
+              >
+              <div
+                id="profileCard"
+                style="
+                  padding: 10px;
+                  background: var(--surface-ground);
+                  border-radius: 10px;
+                  margin-top: 8px;
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <div style="display: flex; gap: 10px; align-items: center">
+                  <div
+                    id="profileAvatar"
+                    class="avatar"
+                    style="
+                      width: 72px;
+                      height: 72px;
+                      border-radius: 12px;
+                      font-size: 28px;
+                    "
+                  >
+                    👨‍🔬
+                  </div>
+                  <div style="flex: 1">
+                    <div
+                      id="profileName"
+                      style="font-weight: 800; color: var(--text-heading)"
+                    >
+                      Mayank
+                    </div>
+                    <div
+                      style="font-size: 12px; color: var(--text-muted)"
+                      id="profileMeta"
+                    >
+                      Level 3 • 2847 XP
+                    </div>
+                  </div>
+                </div>
+                <div class="badges" id="profileBadges"></div>
+                <div
+                  style="
+                    margin-top: 10px;
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                  "
+                >
+                  <button class="ghost" id="clearProfileBtn">
+                    Clear Avatar
+                  </button>
+                  <button class="btn" id="openRewards">Rewards</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--text-heading)"
+                >Teacher Dashboard</strong
+              >
+              <div style="margin-top: 8px">
+                <small id="teacherSummary"
+                  >Login as teacher to view insights</small
+                >
+                <div style="margin-top: 8px; text-align: right">
+                  <button class="btn" id="teacherBtn">Open</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Team RuralXplorers • STEM Quest</div>
+        <div id="syncStatus">Synced • Offline-ready</div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="avatarModal" class="modal-backdrop">
+      <div class="modal">
+        <h3>Choose an Avatar</h3>
+        <div class="avatar-picker" id="avatarChoices"></div>
+        <div
+          style="
+            margin-top: 12px;
+            text-align: right;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+          "
+        >
+          <button class="ghost" id="avatarCancel">Cancel</button>
+          <button class="btn" id="avatarApply">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="teacherModal" class="modal-backdrop">
+      <div class="modal" style="max-width: 1000px">
+        <h3>Teacher Analytics Dashboard</h3>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+          "
+        >
+          <div
+            style="
+              padding: 10px;
+              background: var(--surface-ground);
+              border-radius: 8px;
+            "
+          >
+            <canvas id="chartXP" height="180"></canvas>
+          </div>
+          <div
+            style="
+              padding: 10px;
+              background: var(--surface-ground);
+              border-radius: 8px;
+            "
+          >
+            <canvas id="chartEng" height="180"></canvas>
+          </div>
+          <div
+            style="
+              padding: 10px;
+              background: var(--surface-ground);
+              border-radius: 8px;
+            "
+          >
+            <canvas id="chartTrend" height="180"></canvas>
+          </div>
+          <div
+            style="
+              padding: 10px;
+              background: var(--surface-ground);
+              border-radius: 8px;
+            "
+          >
+            <h4 style="margin: 0 0 6px 0; color: var(--text-heading)">
+              Activity Heatmap
+            </h4>
+            <div class="heatmap" id="activityHeatmap"></div>
+          </div>
+        </div>
+        <div
+          style="
+            margin-top: 12px;
+            text-align: right;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+          "
+        >
+          <button class="ghost" id="closeTeacher">Close</button>
+          <button class="btn" id="syncBtn">Sync Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="rewardsModal" class="modal-backdrop">
+      <div class="modal" style="max-width: 600px">
+        <h3>Rewards &amp; Redeem</h3>
+        <div
+          id="rewardsList"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+          "
+        ></div>
+        <div style="margin-top: 12px; text-align: right">
+          <button class="ghost" id="closeRewardsBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <audio id="levelSound">
+      <source
+        src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="
+      />
+    </audio>
+
+    <script>
+      "use strict";
+      /* ==========================
+    Data store (localStorage simple)
+    ========================== */
+      const STORAGE_KEY = "STEMQUEST_students_v1";
+      const DEFAULT_STUDENTS = [
+        {
+          id: "Mayank",
+          xp: 2847,
+          level: 3,
+          completed: 12,
+          avatar: "👨‍🔬",
+          achievements: ["🏆 Completed 10 lessons"],
+        },
+        {
+          id: "Yash",
+          xp: 2634,
+          level: 3,
+          completed: 11,
+          avatar: "🤖",
+          achievements: ["⚡ Fast Learner"],
+        },
+        {
+          id: "Shivam",
+          xp: 2421,
+          level: 3,
+          completed: 10,
+          avatar: "👨‍🚀",
+          achievements: [],
+        },
+        {
+          id: "Anuraj",
+          xp: 2198,
+          level: 2,
+          completed: 9,
+          avatar: "💻",
+          achievements: [],
+        },
+        {
+          id: "Akriti",
+          xp: 0,
+          level: 1,
+          completed: 0,
+          avatar: "👩‍🔬",
+          achievements: [],
+        },
+      ];
+      function readStudents() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_STUDENTS));
+            return JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+          }
+          return JSON.parse(raw);
+        } catch (e) {
+          console.warn(e);
+          return JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+        }
+      }
+      function saveStudents(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      }
+
+      /* ==========================
+    App State
+    ========================== */
+      let students = readStudents();
+      let currentStudent = students[0].id;
+      let role = localStorage.getItem("role") || "teacher";
+      let name = localStorage.getItem("name") || "Mayank";
+
+      /* ======== UI ELEMENTS ======== */
+      const GAMES = [
+        {
+          id: "math",
+          title: "🔢 Math Adventures",
+          desc: "Puzzles & patterns",
+          xp: 250,
+        },
+        {
+          id: "physics",
+          title: "⚛️ Physics Lab",
+          desc: "Virtual experiments",
+          xp: 350,
+        },
+        {
+          id: "chemistry",
+          title: "🧪 Chemistry Quest",
+          desc: "Reaction puzzles",
+          xp: 300,
+        },
+        {
+          id: "biology",
+          title: "🔬 Life Sciences",
+          desc: "Ecosystems & labs",
+          xp: 200,
+        },
+      ];
+      const REWARDS = [
+        { id: "bag", label: "Bag", cost: 500 },
+        { id: "books", label: "Books", cost: 1000 },
+        { id: "scholarship", label: "Scholarship", cost: 3000 },
+        { id: "phone", label: "Phone", cost: 5000 },
+        { id: "laptop", label: "Laptop", cost: 10000 },
+      ];
+
+      /* ======= Helpers ======= */
+      function el(id) {
+        return document.getElementById(id);
+      }
+      function notify(msg, sticky = false) {
+        const n = document.createElement("div");
+        n.innerText = msg;
+        Object.assign(n.style, {
+          position: "fixed",
+          right: "18px",
+          bottom: "18px",
+          background: "#1e293b",
+          color: "#fff",
+          padding: "12px 16px",
+          borderRadius: "0.5rem",
+          zIndex: 1200,
+          boxShadow: "0 8px 28px rgba(2,6,23,0.12)",
+          transform: "translateY(200%)",
+          transition: "transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1)",
+        });
+        document.body.appendChild(n);
+        setTimeout(() => (n.style.transform = "translateY(0)"), 50);
+        setTimeout(
+          () => {
+            n.style.transform = "translateY(200%)";
+            setTimeout(() => n.remove(), 400);
+          },
+          sticky ? 3000 : 2400
+        );
+      }
+      function playSound() {
+        try {
+          el("levelSound").play();
+        } catch (e) {}
+      }
+
+      /* ======= Rendering: Games & Progress ======= */
+      function renderGames() {
+        const grid = el("gameGrid");
+        grid.innerHTML = "";
+        const getProgress = () => Math.round(Math.random() * 80 + 20);
+
+        GAMES.forEach((g) => {
+          const c = document.createElement("div");
+          c.className = "card";
+          c.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="title">${g.title}</div><small>${g.desc}</small></div>
+        <div><small>+${g.xp} XP</small></div>
+      </div>
+      <div class="progress"><i style="width:0%"></i></div>
+      <div style="display:flex;justify-content:space-between;margin-top:1rem; align-items: center;">
+        <small class="small">Difficulty</small>
+        <div style="display:flex;gap:8px">
+          <button class="ghost">Preview</button>
+          <button class="btn">Play</button>
+        </div>
+      </div>`;
+          c.querySelector(".btn").addEventListener("click", () =>
+            playGame(g.id)
+          );
+          c.querySelector(".ghost").addEventListener("click", () =>
+            previewGame(g.id)
+          );
+          grid.appendChild(c);
+          setTimeout(() => {
+            c.querySelector(".progress>i").style.width = getProgress() + "%";
+          }, 120);
+        });
+      }
+
+      /* ===== Leaderboard ===== */
+      function renderLeaderboard() {
+        const lb = el("leaderboard");
+        lb.innerHTML = "";
+        students.sort((a, b) => (b.xp || 0) - (a.xp || 0));
+        students.forEach((s, idx) => {
+          const div = document.createElement("div");
+          div.className = "lb-item";
+          const medal =
+            idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : idx + 1;
+          div.innerHTML = `
+      <div class="rank">${medal}</div>
+      <div style="flex:1;display:flex;gap:10px;align-items:center">
+        <div class="avatar" style="width:46px;height:46px;font-size:1.2rem;">${
+          s.avatar || s.id.charAt(0)
+        }</div>
+        <div>
+          <div style="font-weight:800; color: var(--text-heading);">${
+            s.id
+          }</div>
+          <small>Level ${s.level || 1} • ${s.completed || 0} lessons</small>
+        </div>
+      </div>
+      <div style="font-weight:800;color:var(--accent)">${s.xp || 0} XP</div>`;
+          lb.appendChild(div);
+        });
+        const totalXP = students.reduce((a, b) => a + (b.xp || 0), 0);
+        const lessons = students.reduce((a, b) => a + (b.completed || 0), 0);
+        el("statXP").innerText = totalXP.toLocaleString();
+        el("statLessons").innerText = lessons;
+        el("statEng").innerText =
+          Math.round(
+            students.length
+              ? (students.reduce((a, b) => a + ((b.xp || 0) > 0 ? 1 : 0), 0) /
+                  students.length) *
+                  100
+              : 0
+          ) + "%";
+        const cs = students.find((s) => s.id === currentStudent);
+        if (cs) el("xpChip").innerText = `${cs.xp || 0} XP • L${cs.level || 1}`;
+      }
+
+      /* ====== Avatars list & picker ====== */
+      const AVATAR_SET = ["🤖", "👩‍🔬", "👨‍🚀", "💻", "🧑‍🔬", "🧠", "🔬", "🛰️"];
+      function renderAvatarRow() {
+        const cont = el("avatars");
+        cont.innerHTML = "";
+        students.forEach((s) => {
+          const a = document.createElement("div");
+          a.className = "avatar";
+          a.title = s.id;
+          a.innerText = s.avatar || s.id.charAt(0);
+          a.addEventListener("click", () => selectProfile(s.id));
+          cont.appendChild(a);
+        });
+      }
+      function openAvatarPicker() {
+        const modal = el("avatarModal");
+        modal.style.display = "flex";
+        const choices = el("avatarChoices");
+        choices.innerHTML = "";
+        AVATAR_SET.forEach((av) => {
+          const d = document.createElement("div");
+          d.className = "avatar-choice";
+          d.dataset.avatar = av;
+          d.innerHTML = `<div style="font-size:28px">${av}</div>`;
+          d.addEventListener("click", () => {
+            document
+              .querySelectorAll(".avatar-choice")
+              .forEach((x) => (x.style.borderColor = "var(--border-color)"));
+            d.style.borderColor = "var(--primary)";
+          });
+          choices.appendChild(d);
+        });
+      }
+      function closeAvatarPicker() {
+        el("avatarModal").style.display = "none";
+      }
+
+      function assignAvatarToCurrent() {
+        const sel = document.querySelector(
+          '.avatar-choice[style*="var(--primary)"]'
+        );
+        if (!sel) {
+          notify("Please select an avatar first.");
+          return;
+        }
+        const avatar = sel.dataset.avatar;
+        if (!currentStudent) {
+          notify("Select a student first");
+          return;
+        }
+        const s = students.find((x) => x.id === currentStudent);
+        if (s) {
+          s.avatar = avatar;
+          saveStudents(students);
+          renderAvatarRow();
+          renderLeaderboard();
+          selectProfile(currentStudent);
+          notify("Avatar updated");
+        }
+        closeAvatarPicker();
+      }
+
+      /* ===== Profile selection & badges ===== */
+      function selectProfile(id) {
+        currentStudent = id;
+        const s = students.find((x) => x.id === id);
+        if (!s) return;
+        el("profileName").innerText = s.id;
+        el("profileMeta").innerText = `Level ${s.level || 1} • ${s.xp || 0} XP`;
+        el("profileAvatar").innerText = s.avatar || s.id.charAt(0);
+        const badges = el("profileBadges");
+        badges.innerHTML = "";
+        if (
+          (s.completed || 0) >= 10 &&
+          !s.achievements?.includes("🏆 Completed 10 lessons")
+        ) {
+          s.achievements = s.achievements || [];
+          s.achievements.push("🏆 Completed 10 lessons");
+        }
+        if (
+          (s.xp || 0) >= 2000 &&
+          !s.achievements?.includes("⚡ Fast Learner")
+        ) {
+          s.achievements = s.achievements || [];
+          s.achievements.push("⚡ Fast Learner");
+        }
+        saveStudents(students);
+        (s.achievements || []).forEach((b) => {
+          const span = document.createElement("div");
+          span.className = "badge";
+          span.innerText = b;
+          badges.appendChild(span);
+        });
+        renderLeaderboard();
+        el("loggedAs").innerText = `${s.id} (${role})`;
+        el("xpChip").innerText = `${s.xp || 0} XP • L${s.level || 1}`;
+      }
+
+      /* ===== Play game ===== */
+      function playGame(gameId) {
+        if (!currentStudent) {
+          notify("Select a student by clicking an avatar");
+          return;
+        }
+        const s = students.find((x) => x.id === currentStudent);
+        const game = GAMES.find((g) => g.id === gameId);
+        const gain = game?.xp || 100;
+        const prevLevel = s.level || 1;
+        s.xp = (s.xp || 0) + gain;
+        s.completed = (s.completed || 0) + 1;
+        s.level = Math.floor((s.xp || 0) / 1000) + 1;
+        recordGamePlay(gameId);
+        saveStudents(students);
+        selectProfile(s.id);
+        notify(`${s.id} +${gain} XP`);
+        if (s.level > prevLevel) {
+          playSound();
+          spawnConfetti();
+          notify(`Level Up! Now L${s.level}`, true);
+        }
+        renderLeaderboard();
+        renderGames();
+        updateTeacherCharts();
+      }
+      function previewGame(key) {
+        notify("Preview feature coming soon!");
+      }
+
+      /* ===== Confetti ===== */
+      function spawnConfetti() {
+        /* ... implementation unchanged ... */
+      }
+
+      /* ===== Activity recording ===== */
+      function getGamePlayCounts() {
+        return JSON.parse(
+          localStorage.getItem("STEMQUEST_game_counts_v1") || "{}"
+        );
+      }
+      function recordGamePlay(gameId) {
+        const counts = getGamePlayCounts();
+        counts[gameId] = (counts[gameId] || 0) + 1;
+        localStorage.setItem(
+          "STEMQUEST_game_counts_v1",
+          JSON.stringify(counts)
+        );
+      }
+
+      /* ===== Teacher Dashboard ===== */
+      let chartXP, chartEng, chartTrend;
+      function openTeacherModal() {
+        if (role !== "teacher") {
+          notify("Login as teacher to view analytics");
+          return;
+        }
+        el("teacherModal").style.display = "flex";
+        setTimeout(() => updateTeacherCharts(), 50);
+      }
+      function closeTeacherModal() {
+        el("teacherModal").style.display = "none";
+      }
+
+      function updateTeacherCharts() {
+        const isDark = document.body.classList.contains("dark");
+        const gridColor = isDark
+          ? "rgba(255, 255, 255, 0.1)"
+          : "rgba(0, 0, 0, 0.1)";
+        const labelColor = isDark ? "#cbd5e1" : "#334155";
+
+        const options = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false, labels: { color: labelColor } },
+          },
+          scales: {
+            y: { ticks: { color: labelColor }, grid: { color: gridColor } },
+            x: { ticks: { color: labelColor }, grid: { color: gridColor } },
+          },
+        };
+        const pieOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "bottom", labels: { color: labelColor } },
+          },
+        };
+
+        const labels = students.map((s) => s.id);
+        const xpData = students.map((s) => s.xp || 0);
+        const engagement = students.map((s) =>
+          Math.min(100, Math.round((s.xp || 0) / 40))
+        );
+        let sum = 0;
+        const trend = xpData.map((v) => (sum += v));
+
+        try {
+          chartXP?.destroy();
+          chartEng?.destroy();
+          chartTrend?.destroy();
+        } catch (e) {}
+
+        chartXP = new Chart(el("chartXP"), {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "XP",
+                data: xpData,
+                backgroundColor: "rgba(79, 70, 229, 0.8)",
+                borderRadius: 4,
+              },
+            ],
+          },
+          options,
+        });
+        chartEng = new Chart(el("chartEng"), {
+          type: "doughnut",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Engagement",
+                data: engagement,
+                backgroundColor: [
+                  "#4f46e5",
+                  "#10b981",
+                  "#f59e0b",
+                  "#3b82f6",
+                  "#ef4444",
+                ],
+              },
+            ],
+          },
+          options: pieOptions,
+        });
+        chartTrend = new Chart(el("chartTrend"), {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Cumulative XP",
+                data: trend,
+                tension: 0.4,
+                borderColor: "#10b981",
+                fill: true,
+                backgroundColor: "rgba(16, 185, 129, 0.1)",
+              },
+            ],
+          },
+          options,
+        });
+        renderHeatmap();
+      }
+
+      function renderHeatmap() {
+        const container = el("activityHeatmap");
+        container.innerHTML = "";
+        const counts = getGamePlayCounts();
+        const max = Math.max(...Object.values(counts), 1);
+        GAMES.forEach((g) => {
+          const val = counts[g.id] || 0;
+          const color = `rgba(79, 70, 229, ${Math.max(0.1, val / max)})`;
+          const div = document.createElement("div");
+          div.className = "heat-cell";
+          div.style.background = color;
+          div.innerText = `${g.title.split(" ")[0]}\n${val || 0}`;
+          container.appendChild(div);
+        });
+      }
+
+      /* ===== Rewards ===== */
+      function openRewards() {
+        el("rewardsModal").style.display = "flex";
+        const list = el("rewardsList");
+        list.innerHTML = "";
+        REWARDS.forEach((r) => {
+          const d = document.createElement("div");
+          d.className = "card";
+          d.style.textAlign = "center";
+          d.innerHTML = `<div style="font-weight:800; color: var(--text-heading);">${r.label}</div><div style="color:var(--text-muted)">${r.cost} XP</div><div style="margin-top:8px;"><button class="btn">Redeem</button></div>`;
+          d.querySelector("button").addEventListener("click", () =>
+            redeemReward(r.id)
+          );
+          list.appendChild(d);
+        });
+      }
+      function redeemReward(id) {
+        if (!currentStudent) {
+          notify("Select a student");
+          return;
+        }
+        const s = students.find((x) => x.id === currentStudent);
+        const r = REWARDS.find((x) => x.id === id);
+        if ((s.xp || 0) < r.cost) {
+          notify("Not enough XP");
+          return;
+        }
+        s.xp -= r.cost;
+        s.inventory = s.inventory || [];
+        s.inventory.push({
+          id: r.id,
+          label: r.label,
+          date: new Date().toISOString(),
+        });
+        saveStudents(students);
+        renderLeaderboard();
+        selectProfile(s.id);
+        el("rewardsModal").style.display = "none";
+        notify(`Redeemed ${r.label}`);
+      }
+
+      /* ===== Add Student ===== */
+      function addStudentQuick() {
+        const name = prompt("Enter new student name:");
+        if (!name) return;
+        if (students.find((s) => s.id === name)) {
+          notify("Student with this name already exists.");
+          return;
+        }
+        const obj = {
+          id: name,
+          xp: 0,
+          level: 1,
+          completed: 0,
+          avatar: "🧑‍🔬",
+          achievements: [],
+        };
+        students.push(obj);
+        saveStudents(students);
+        renderAvatarRow();
+        renderLeaderboard();
+        notify("Student added");
+      }
+
+      /* ===== Login ===== */
+      function openLogin() {
+        const nm = prompt("Enter your name (for demo purposes):");
+        if (!nm) return;
+        name = nm;
+        role = confirm("Login as Teacher? (OK for Teacher, Cancel for Student)")
+          ? "teacher"
+          : "student";
+        localStorage.setItem("name", name);
+        localStorage.setItem("role", role);
+        el("loggedAs").innerText = `${name} (${role})`;
+        notify(`Logged in as ${name} (${role})`);
+        updateTeacherCharts();
+      }
+
+      /* ===== Initial Load & Event Bindings ===== */
+      function init() {
+        document.querySelectorAll(".modal-backdrop").forEach((m) => {
+          m.style.display = "none";
+          m.addEventListener("click", (e) => {
+            if (e.target === m) m.style.display = "none";
+          });
+        });
+
+        el("darkToggle").addEventListener("click", () => {
+          document.body.classList.toggle("dark");
+          updateTeacherCharts(); // Redraw charts for new theme
+        });
+
+        el("loginBtn").addEventListener("click", openLogin);
+        el("avatarPickerBtn").addEventListener("click", openAvatarPicker);
+        el("addStudentBtn").addEventListener("click", addStudentQuick);
+        el("openRewards").addEventListener("click", openRewards);
+        el("closeRewardsBtn").addEventListener(
+          "click",
+          () => (el("rewardsModal").style.display = "none")
+        );
+        el("avatarApply").addEventListener("click", assignAvatarToCurrent);
+        el("avatarCancel").addEventListener("click", closeAvatarPicker);
+        el("teacherBtn").addEventListener("click", openTeacherModal);
+        el("closeTeacher").addEventListener("click", closeTeacherModal);
+        el("syncBtn").addEventListener("click", () => {
+          notify("Data Synced");
+          saveStudents(students);
+          updateTeacherCharts();
+        });
+        el("speakBtn").addEventListener("click", () => {
+          const selectedLang = el("langSelect").value;
+          const msg =
+            selectedLang === "hi"
+              ? "स्टेम क्वेस्ट में आपका स्वागत है। एक अवतार चुनें और अनुभव अंक अर्जित करने के लिए खेलें।"
+              : "Welcome to STEM Quest. Select an avatar and play to earn experience points.";
+          const langCode = selectedLang === "hi" ? "hi-IN" : "en-US";
+
+          try {
+            if ("speechSynthesis" in window) {
+              const u = new SpeechSynthesisUtterance(msg);
+              u.lang = langCode;
+              speechSynthesis.cancel(); // Cancel any previous speech
+              speechSynthesis.speak(u);
+            } else {
+              notify("Speech synthesis is not supported in your browser.");
+            }
+          } catch (e) {
+            console.warn("Speech synthesis error:", e);
+            notify("Could not play audio.");
+          }
+        });
+
+        renderGames();
+        renderAvatarRow();
+        renderLeaderboard();
+        selectProfile(currentStudent);
+        el("loggedAs").innerText = `${name} (${role})`;
+        if (role === "teacher") updateTeacherCharts();
+      }
+      window.onload = init;
+    </script>
+  </body>
+</html>
